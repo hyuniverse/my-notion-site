@@ -52,7 +52,7 @@ const ContactSection = () => {
                 className="text-foreground hover:text-muted-foreground transition-colors duration-300 inline-flex items-center gap-2"
               >
                 hyuniverse12@gmail.com
-                <span className="text-muted-foreground">&nearr;</span>
+                <span className="text-muted-foreground">&rarr;</span>
               </a>
             </div>
 
@@ -67,7 +67,7 @@ const ContactSection = () => {
                     className="text-foreground hover:text-muted-foreground transition-colors duration-300 inline-flex items-center gap-2"
                   >
                     GitHub
-                    <span className="text-muted-foreground">&nearr;</span>
+                    <span className="text-muted-foreground">&rarr;</span>
                   </a>
                 </li>
                 <li>
@@ -78,7 +78,7 @@ const ContactSection = () => {
                     className="text-foreground hover:text-muted-foreground transition-colors duration-300 inline-flex items-center gap-2"
                   >
                     Blog
-                    <span className="text-muted-foreground">&nearr;</span>
+                    <span className="text-muted-foreground">&rarr;</span>
                   </a>
                 </li>
               </ul>

@@ -5,12 +5,15 @@ import Projects from "@/components/Projects";
 import ContactSection from "@/components/ContactSection";
 import SiteFooter from "@/components/SiteFooter";
 import SmoothScroll from "@/components/SmoothScroll";
-import { getPosts } from "@/lib/notion";
+import { getPosts, getProjects } from "@/lib/notion";
 
 export const revalidate = 60; // Revalidate every 60 seconds
 
 export default async function Home() {
-  const posts = await getPosts();
+  const [posts, projects] = await Promise.all([
+    getPosts(),
+    getProjects()
+  ]);
 
   return (
     <SmoothScroll>
@@ -24,7 +27,7 @@ export default async function Home() {
       <main id="main" role="main">
         <Hero />
         <BlogList posts={posts} />
-        <Projects />
+        <Projects projects={projects} />
         <ContactSection />
       </main>
       <SiteFooter />

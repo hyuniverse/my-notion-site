@@ -2,28 +2,13 @@
 
 import { useRef, useEffect, useState } from "react";
 import Link from "next/link";
+import { Project } from "@/lib/notion";
 
-interface Project {
-  title: string;
-  description: string;
-  link?: string;
-  tags: string[];
+interface ProjectsProps {
+  projects: Project[];
 }
 
-const projects: Project[] = [
-  {
-    title: "Portfolio",
-    description: "Implementing interfaces and interactions.",
-    tags: ["Next.js", "TypeScript", "Tailwind"],
-  },
-  {
-    title: "Tech Blog",
-    description: "Thoughts on design and development.",
-    tags: ["Notion API", "MDX"],
-  },
-];
-
-const Projects = () => {
+const Projects = ({ projects }: ProjectsProps) => {
   const sectionRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -59,7 +44,7 @@ const Projects = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {projects.map((project, index) => (
             <div
-              key={project.title}
+              key={project.id}
               className={`group p-6 glass-light rounded-lg hover:bg-white/10 transition-all duration-500 ${
                 isVisible
                   ? "opacity-100 translate-y-0"
@@ -67,13 +52,9 @@ const Projects = () => {
               }`}
               style={{ transitionDelay: `${index * 150}ms` }}
             >
-              {project.link ? (
-                <Link href={project.link} className="block">
-                  <ProjectContent project={project} />
-                </Link>
-              ) : (
+              <Link href={`/projects/${project.id}`} className="block">
                 <ProjectContent project={project} />
-              )}
+              </Link>
             </div>
           ))}
         </div>
@@ -88,11 +69,9 @@ const ProjectContent = ({ project }: { project: Project }) => (
       <h3 className="text-foreground text-lg font-normal group-hover:text-muted-foreground transition-colors duration-300">
         {project.title}
       </h3>
-      {project.link && (
-        <span className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          &nearr;
-        </span>
-      )}
+      <span className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        &rarr;
+      </span>
     </div>
     <p className="text-muted text-sm mb-4">{project.description}</p>
     <div className="flex flex-wrap gap-2">
