@@ -79,7 +79,7 @@ const BlogList = ({ posts }: BlogListProps) => {
                       {post.tags.slice(0, 2).map((tag) => (
                         <span
                           key={tag}
-                          className="text-xs text-muted bg-secondary px-2 py-1 rounded"
+                          className="text-xs text-muted-foreground bg-white/5 backdrop-blur-sm px-2 py-1 rounded"
                         >
                           {tag}
                         </span>

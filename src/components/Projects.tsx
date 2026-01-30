@@ -48,7 +48,7 @@ const Projects = () => {
     <section
       id="projects"
       ref={sectionRef}
-      className="px-6 md:px-12 lg:px-24 py-24 md:py-32 bg-card/50"
+      className="px-6 md:px-12 lg:px-24 py-24 md:py-32 glass"
     >
       <div className="max-w-4xl">
         <div className="flex items-center gap-4 mb-12">
@@ -60,7 +60,7 @@ const Projects = () => {
           {projects.map((project, index) => (
             <div
               key={project.title}
-              className={`group p-6 border border-border rounded-lg hover:border-muted-foreground transition-all duration-500 ${
+              className={`group p-6 glass-light rounded-lg hover:bg-white/10 transition-all duration-500 ${
                 isVisible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-4"
@@ -99,7 +99,7 @@ const ProjectContent = ({ project }: { project: Project }) => (
       {project.tags.map((tag) => (
         <span
           key={tag}
-          className="text-xs text-muted-foreground bg-secondary px-2 py-1 rounded"
+          className="text-xs text-muted-foreground bg-white/10 px-2 py-1 rounded"
         >
           {tag}
         </span>
