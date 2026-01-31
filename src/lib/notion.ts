@@ -183,7 +183,22 @@ export async function getPosts(): Promise<BlogPost[]> {
       ],
     });
 
+    console.log('[DEBUG] Posts API response:', {
+      resultsCount: response.results.length,
+      hasResults: response.results.length > 0,
+      firstResult: response.results.length > 0 ? {
+        id: response.results[0].id,
+        properties: Object.keys((response.results[0] as any).properties || {})
+      } : null
+    });
+
     return response.results.map((page: any) => {
+      console.log('[DEBUG] Processing page:', { 
+        id: page.id, 
+        url: page.url,
+        publicUrl: page.public_url,
+        properties: Object.keys(page.properties || {})
+      });
       const properties = page.properties;
 
       // Extract title
@@ -256,28 +271,74 @@ function getMockPosts(): BlogPost[] {
 }
 
 /**
+ * Notion URL에서 실제 페이지 ID를 추출하는 함수
+ */
+/**
  * 특정 페이지의 상세 내용을 가져오는 함수
  */
 export async function getPostPage(pageId: string) {
+  console.log('[DEBUG] getPostPage called with pageId:', pageId);
+  
   // Mock 데이터인 경우 에러 방지
   if (pageId.startsWith('mock-')) {
+    console.log('[DEBUG] Mock data detected, throwing error');
     throw new Error(`invalid notion pageId "${pageId}"`);
   }
   
-  return await notionRender.getPage(pageId);
+  try {
+    console.log('[DEBUG] Fetching page content using notionRender.getPage...');
+    
+    // notion-client의 getPage로 페이지 내용 가져오기
+    // 이 방법이 페이지의 실제 블록 콘텐츠를 가져오는 올바른 방법
+    const result = await notionRender.getPage(pageId);
+    console.log('[DEBUG] Successfully fetched page content');
+    return result;
+  } catch (error) {
+    console.error('[DEBUG] Error fetching page content:', error);
+    throw error;
+  }
+}
+
+/**
+ * 특정 프로젝트 페이지의 상세 내용을 가져오는 함수
+ */
+export async function getProjectPage(pageId: string) {
+  console.log('[DEBUG] getProjectPage called with pageId:', pageId);
+  
+  // Mock 데이터인 경우 에러 방지  
+  if (pageId.startsWith('project-')) {
+    console.log('[DEBUG] Mock project data detected, throwing error');
+    throw new Error(`invalid notion pageId "${pageId}"`);
+  }
+  
+  try {
+    console.log('[DEBUG] Fetching project page content using notionRender.getPage...');
+    
+    // notion-client의 getPage로 페이지 내용 가져오기
+    const result = await notionRender.getPage(pageId);
+    console.log('[DEBUG] Successfully fetched project page content');
+    return result;
+  } catch (error) {
+    console.error('[DEBUG] Error fetching project page content:', error);
+    throw error;
+  }
 }
 
 /**
  * 특정 페이지의 메타 정보를 가져오는 함수
  */
 export async function getPostMeta(pageId: string): Promise<BlogPost | null> {
+  console.log('[DEBUG] getPostMeta called with pageId:', pageId);
+  
   // Mock 데이터인 경우 mock 메타 정보 반환
   if (pageId.startsWith('mock-')) {
+    console.log('[DEBUG] Returning mock meta data');
     const mockPosts = getMockPosts();
     return mockPosts.find(post => post.id === pageId) || null;
   }
 
   try {
+    console.log('[DEBUG] Fetching page meta from Notion API...');
     const page = await notion.pages.retrieve({ page_id: pageId }) as any;
     const properties = page.properties;
 

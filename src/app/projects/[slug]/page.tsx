@@ -5,7 +5,7 @@ import Nav from "@/components/Nav";
 import SiteFooter from "@/components/SiteFooter";
 import SmoothScroll from "@/components/SmoothScroll";
 import NotionRenderer from "@/components/NotionRenderer";
-import { getPostPage, getProjects } from "@/lib/notion";
+import { getProjectPage, getProjects } from "@/lib/notion";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -39,14 +39,18 @@ export default async function ProjectPage({ params }: PageProps) {
     notFound();
   }
 
-  // Try to get Notion page content if it's a real Notion page
+  // Try to get Notion page content
   let recordMap = null;
+  let hasContent = false;
+  
   try {
-    if (!slug.startsWith('project-')) {
-      recordMap = await getPostPage(slug);
-    }
+    console.log('[DEBUG] Attempting to get project page content for ID:', project.id);
+    recordMap = await getProjectPage(project.id);
+    hasContent = true;
+    console.log('[DEBUG] Successfully loaded project page content');
   } catch (error) {
-    console.log('No detailed content available for this project');
+    console.error('[DEBUG] Error loading project page content:', error);
+    hasContent = false;
   }
 
   return (
@@ -100,11 +104,11 @@ export default async function ProjectPage({ params }: PageProps) {
 
             {/* Content */}
             <div className="prose prose-invert prose-lg max-w-none">
-              {recordMap ? (
+              {hasContent && recordMap ? (
                 <NotionRenderer recordMap={recordMap} />
               ) : (
                 <div className="text-muted-foreground">
-                  <p>This project doesn't have additional detailed content.</p>
+                  <p>Unable to load project content.</p>
                   {project.link && (
                     <p>
                       <a
